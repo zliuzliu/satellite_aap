@@ -1,0 +1,22 @@
+---
+- name: Post-provisioning configuration
+  hosts: all
+  become: yes
+  tasks:
+    - name: Set timezone to Asia/Shanghai
+      community.general.timezone:
+        name: Asia/Shanghai
+
+    - name: Configure NTP server
+      ansible.builtin.lineinfile:
+        path: /etc/chrony.conf
+        line: "server 10.220.1.254 iburst"
+        insertafter: '^#?server'
+        state: present
+      notify: Restart chrony
+
+  handlers:
+    - name: Restart chrony
+      ansible.builtin.service:
+        name: chronyd
+        state: restarted
