@@ -3,9 +3,9 @@
   hosts: all
   become: yes
   tasks:
-    - name: Set timezone to Asia/Shanghai
-      community.general.timezone:
-        name: Asia/Shanghai
+    - name: Set timezone to Asia/Shanghai using command
+      ansible.builtin.command: timedatectl set-timezone Asia/Shanghai
+      changed_when: false
 
     - name: Configure NTP server
       ansible.builtin.lineinfile:
